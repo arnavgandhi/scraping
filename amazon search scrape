@@ -1,0 +1,42 @@
+import scrapy
+from ..items import DemoItem
+
+class AmazonspiderSpider(scrapy.Spider):
+    name = 'amazonspider'
+    allowed_domains = ['amazon.com']
+    start_urls = ['https://www.amazon.in/s?k=mobiles&ref=nb_sb_noss_2']
+
+    def parse(self, response):
+        items= DemoItem()
+        prodname = response.css('.a-size-medium::text').extract()
+        prodimglink = response.css('.s-image-fixed-height .s-image').extract()
+        prodprice = response.css('.a-price-whole').extract()
+        prodstars = response.css('.sg-col-12-of-28 .aok-align-bottom::attr(src)').extract()
+
+        items['prodname'] = prodname
+        items['prodimglink'] = prodimglink
+        items['prodprice'] = prodprice
+        items['prodstars'] = prodstars
+        yield items
+
+
+
+
+
+##for the items file in scrapy
+
+
+
+
+import scrapy
+
+
+
+class DemoItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    prodname = scrapy.Field()
+    prodimglink = scrapy.Field()
+    prodprice = scrapy.Field()
+    prodstars = scrapy.Field()
+    pass
